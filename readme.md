@@ -1,0 +1,1 @@
+This repo will be working with baby name data and trying to work through a few different methods to make the csv file format into something easier to work with.
