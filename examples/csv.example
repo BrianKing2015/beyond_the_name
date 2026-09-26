@@ -1,0 +1,11 @@
+name,year,gender,count
+Olivia,2023,F,15000
+Liam,2023,M,14000
+Ava,2022,F,16000
+Noah,2022,M,15500
+Emma,2021,F,17000
+Lucas,2021,M,16500
+
+# This is an example of the expected CSV structure for the project.
+# The real data files in the documents folder may have more columns or additional rows,
+# but this sample gives a clear baseline for the importer and SQLite schema.
