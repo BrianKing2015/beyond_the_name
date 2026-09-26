@@ -44,13 +44,12 @@ The first responsibility is to read the source CSV file and turn it into structu
 
 - Find the CSV file in the documents directory.
 - Read the file safely.
-- Normalize field names and data types.
+- Normalize the data types of each row into a consistent shape.
 - Reject or flag malformed rows without crashing the import.
 
 ### Expected behavior
 
 - The CSV file path is resolved from the documents folder.
-- Headers are normalized consistently.
 - Missing values are handled consistently.
 - Empty rows are ignored.
 - Invalid rows can be counted or logged without breaking the rest of the import.
@@ -61,7 +60,7 @@ Write tests before implementation. At minimum:
 
 - test_csv_reader_reads_rows_from_documents_folder
 - test_csv_reader_raises_clear_error_when_csv_is_missing
-- test_csv_reader_normalizes_headers
+- test_csv_reader_normalizes_data_types
 - test_csv_reader_skips_blank_rows
 - test_csv_reader_handles_invalid_row_shapes
 
