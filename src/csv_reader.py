@@ -19,7 +19,7 @@ def _resolve_path(file_path: str | Path) -> Path:
     return path
 
 
-def list_name_files(folder_path: str | Path) -> list[Path]:
+def list_yob_files(folder_path: str | Path) -> list[Path]:
     directory = Path(folder_path)
 
     if not directory.exists():
@@ -31,7 +31,7 @@ def list_name_files(folder_path: str | Path) -> list[Path]:
     )
 
 
-def read_name_file(file_path: str | Path) -> list[dict[str, str | int]]:
+def read_yob_file(file_path: str | Path) -> list[dict[str, str | int]]:
     resolved_path = _resolve_path(file_path)
     records: list[dict[str, str | int]] = []
 

@@ -2,6 +2,8 @@
 
 This project is focused on turning baby name CSV data into a cleaner, faster, queryable source of truth. The overall goal is to make it easier to search and analyze name records without depending on raw CSV files directly.
 
+Before running the import pipeline, you need to populate the local documents folder with the source yob files used by the project. The exact source and download steps are intentionally left vague here so the repo remains portable and easy to use with local data.
+
 The plan is to build a small, test-driven pipeline:
 
 1. Read the raw CSV files stored in the documents folder.
