@@ -38,20 +38,20 @@ This is intentionally split into separate files so each stage has a distinct job
 - sqlite_loader.py: create tables, insert rows, and keep database setup logic isolated.
 - query_helpers.py: expose safe, read-only queries for reporting and search.
 
-## Step 1: Read the CSV from the documents folder
+## Step 1: Read the yob files from the documents folder
 
-The first responsibility is to read the source CSV file and turn it into structured Python data that we can trust.
+The first responsibility is to read the source yob files and turn them into structured Python data that we can trust.
 
 ### Goal
 
-- Find the CSV file in the documents directory.
-- Read the file safely.
+- Find the yob files in the documents directory.
+- Read the files safely.
 - Normalize the data types of each row into a consistent shape.
 - Reject or flag malformed rows without crashing the import.
 
 ### Expected behavior
 
-- The CSV file path is resolved from the documents folder.
+- The yob file path is resolved from the documents folder.
 - Missing values are handled consistently.
 - Empty rows are ignored.
 - Invalid rows can be counted or logged without breaking the rest of the import.
@@ -60,11 +60,11 @@ The first responsibility is to read the source CSV file and turn it into structu
 
 Write tests before implementation. At minimum:
 
-- test_csv_reader_reads_rows_from_documents_folder
-- test_csv_reader_raises_clear_error_when_csv_is_missing
-- test_csv_reader_normalizes_data_types
-- test_csv_reader_skips_blank_rows
-- test_csv_reader_handles_invalid_row_shapes
+- test_yob_reader_reads_rows_from_documents_folder
+- test_yob_reader_raises_clear_error_when_yob_file_is_missing
+- test_yob_reader_normalizes_data_types
+- test_yob_reader_skips_blank_rows
+- test_yob_reader_handles_invalid_row_shapes
 
 These tests should confirm the import layer produces clean records before the database layer ever sees them.
 
@@ -90,6 +90,8 @@ Once the CSV rows are reliable, the next step is to persist them in a SQLite dat
 
 - test_sqlite_loader_creates_database_and_tables
 - test_sqlite_loader_inserts_rows_from_csv_records
+- test_sqlite_loader_add_year
+- test_sqlite_loader_inserts_rows_from_yob_file
 - test_sqlite_loader_replaces_existing_data_cleanly
 - test_sqlite_loader_handles_empty_record_set
 - test_sqlite_loader_rejects_invalid_schema_data

@@ -3,7 +3,7 @@ from pathlib import Path
 from src.csv_reader import list_yob_files, read_yob_file
 
 
-def test_read_first_yob_file_returns_non_zero_list(tmp_path):
+def test_yob_reader_reads_rows_from_documents_folder(tmp_path):
     file_path = tmp_path / "yob1880.txt"
     file_path.write_text("Mary,F,7065\nJohn,M,9655\n", encoding="utf-8")
 
@@ -12,7 +12,7 @@ def test_read_first_yob_file_returns_non_zero_list(tmp_path):
     assert len(records) > 0
 
 
-def test_list_yob_files_returns_more_than_one_file(tmp_path):
+def test_yob_reader_lists_yob_files_in_directory(tmp_path):
     (tmp_path / "yob1880.txt").write_text("Mary,F,7065\n", encoding="utf-8")
     (tmp_path / "yob1881.txt").write_text("John,M,9655\n", encoding="utf-8")
 
@@ -21,7 +21,7 @@ def test_list_yob_files_returns_more_than_one_file(tmp_path):
     assert len(files) > 1
 
 
-def test_read_yob_file_returns_expected_schema(tmp_path):
+def test_yob_reader_normalizes_data_types(tmp_path):
     file_path = tmp_path / "yob1880.txt"
     file_path.write_text("Mary,F,7065\n", encoding="utf-8")
 
@@ -34,7 +34,7 @@ def test_read_yob_file_returns_expected_schema(tmp_path):
     assert isinstance(first_record["count"], int)
 
 
-def test_list_yob_files_only_includes_yob_pattern_and_reads_every_file(tmp_path):
+def test_yob_reader_filters_only_yob_files_and_reads_every_file(tmp_path):
     (tmp_path / "notes.txt").write_text("not a name file\n", encoding="utf-8")
     (tmp_path / "yob1880.txt").write_text("Mary,F,7065\nJohn,M,9655\n", encoding="utf-8")
     (tmp_path / "yob1881.txt").write_text("Emma,F,2003\nJames,M,8746\n", encoding="utf-8")
@@ -48,7 +48,7 @@ def test_list_yob_files_only_includes_yob_pattern_and_reads_every_file(tmp_path)
         assert len(records) > 0
 
 
-def test_read_yob_file_normalizes_field_names_and_values(tmp_path):
+def test_yob_reader_normalizes_values(tmp_path):
     file_path = tmp_path / "yob1880.txt"
     file_path.write_text("Mary,F,7065\n", encoding="utf-8")
 
@@ -62,11 +62,31 @@ def test_read_yob_file_normalizes_field_names_and_values(tmp_path):
     }
 
 
-def test_read_yob_file_raises_for_missing_file(tmp_path):
+def test_yob_reader_raises_clear_error_when_yob_file_is_missing(tmp_path):
     missing_file = tmp_path / "missing_yob_file.txt"
 
     try:
         read_yob_file(missing_file)
         assert False, "Expected FileNotFoundError to be raised"
     except FileNotFoundError:
+        pass
+
+
+def test_yob_reader_skips_blank_rows(tmp_path):
+    file_path = tmp_path / "yob1880.txt"
+    file_path.write_text("\nMary,F,7065\n\nJohn,M,9655\n\n", encoding="utf-8")
+
+    records = read_yob_file(file_path)
+
+    assert [row["name"] for row in records] == ["Mary", "John"]
+
+
+def test_yob_reader_handles_invalid_row_shapes(tmp_path):
+    file_path = tmp_path / "yob1880.txt"
+    file_path.write_text("Mary,F,7065\nBadRow\n", encoding="utf-8")
+
+    try:
+        read_yob_file(file_path)
+        assert False, "Expected ValueError to be raised"
+    except ValueError:
         pass
