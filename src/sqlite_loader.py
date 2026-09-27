@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 
@@ -26,7 +27,10 @@ def create_names_database(documents_dir: str | Path) -> Path:
     return db_path
 
 
-def insert_name_records(db_path: str | Path, records: list[dict[str, object]]) -> None:
+def insert_name_records(
+    db_path: str | Path,
+    records: Sequence[Mapping[str, object]],
+) -> None:
     database_path = Path(db_path)
 
     required_fields = {"name", "gender", "count"}

@@ -164,3 +164,46 @@ The project is successful when:
 - Each stage is protected by TDD tests that catch regressions early.
 
 This plan creates a clean foundation for growing the dataset without scattering logic across unrelated files.
+
+## Future TODOs
+
+These are the next ideas worth exploring after the core ETL and query layers are stable. The best next candidates are the ones that are easy to express in SQL and immediately useful for browsing the dataset.
+
+### High priority
+
+1. TODO: wildcard name searches
+   - Support prefix and suffix matching such as "A%" or "%a".
+   - This is a natural extension of a name lookup and works well with SQL LIKE queries.
+   - Good next step because it adds search flexibility without changing the schema.
+
+2. TODO: top X names in a given year
+   - Return the most popular names for a selected year and optionally by gender.
+   - This is a strong reporting feature and a nice way to validate the raw database output.
+   - Good next step because it is simple to reason about and highly useful for real-world data exploration.
+
+3. TODO: first appearance vs peak year for a name
+   - Track when a name first appears in the data and when it reaches its highest count.
+   - This is the most interesting analytical query after search and ranking.
+   - Good next step because it builds on the existing year and count fields without requiring new assumptions.
+
+### Medium priority
+
+4. TODO: male/female name variants
+   - Explore how to relate names across genders, such as "Alex" / "Alexa", "Jordan" / "Jordyn", or shared stems.
+   - This is likely a more nuanced matching problem and may require a dedicated name-normalization step.
+   - Worth addressing after the simpler queries are in place.
+
+5. TODO: name lifespan window analysis
+   - Estimate how many people with a given name were alive within a rolling 80-year window.
+   - This is a rich historical question, but it requires careful assumptions about birth year, age, and how to model life spans.
+   - Best tackled after the core database and query features are settled.
+
+### Suggested order
+
+1. wildcard name searches
+2. top X names in a given year
+3. first appearance vs peak year for a name
+4. male/female variant analysis
+5. lifespan window analysis
+
+This sequence keeps the work grounded in the most useful and least ambiguous SQL features before moving on to more speculative historical analysis.
