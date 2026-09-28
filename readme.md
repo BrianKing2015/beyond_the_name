@@ -18,6 +18,11 @@ This keeps the system simple, predictable, and easy to test as new naming rules 
 beyond_the_name/
 ├── documents/
 │   └── baby_names.csv
+├── examples/
+│   ├── basic_query_examples.py
+│   ├── wildcard_query_examples.py
+│   ├── top_names_query_examples.py
+│   └── name_timeline_query_examples.py
 ├── src/
 │   ├── __init__.py
 │   ├── csv_reader.py
@@ -126,6 +131,28 @@ The final layer should be a safe query API. No writing should happen here; this 
 
 These tests are especially important because they define the public contract for the rest of the application.
 
+## Example query scripts
+
+The project includes small runnable examples for the most practical database queries.
+
+- basic_query_examples.py: exact-value searches by name and year.
+- wildcard_query_examples.py: prefix and suffix matching using SQLite LIKE patterns such as "A%" and "%a".
+- top_names_query_examples.py: ranked results for the most popular names in a selected year, with optional gender filtering.
+- name_timeline_query_examples.py: timeline summaries for a name, including first year and peak year/count.
+
+These are meant to act as working references against the real database object instead of only abstract SQL snippets.
+
+### Run the example scripts
+
+From the project root, you can run each script directly with Python:
+
+```bash
+python examples/basic_query_examples.py
+python examples/wildcard_query_examples.py
+python examples/top_names_query_examples.py
+python examples/name_timeline_query_examples.py
+```
+
 ## TDD workflow
 
 Use a simple red-green-refactor cycle:
@@ -165,45 +192,39 @@ The project is successful when:
 
 This plan creates a clean foundation for growing the dataset without scattering logic across unrelated files.
 
-## Future TODOs
+## Future roadmap
 
-These are the next ideas worth exploring after the core ETL and query layers are stable. The best next candidates are the ones that are easy to express in SQL and immediately useful for browsing the dataset.
+This project already covers the core ETL flow and a useful set of query patterns. The next ideas are intentionally more exploratory and are best treated as future enhancements rather than missing core features.
 
 ### High priority
 
-1. TODO: wildcard name searches
-   - Support prefix and suffix matching such as "A%" or "%a".
-   - This is a natural extension of a name lookup and works well with SQL LIKE queries.
-   - Good next step because it adds search flexibility without changing the schema.
-
-2. TODO: top X names in a given year
-   - Return the most popular names for a selected year and optionally by gender.
-   - This is a strong reporting feature and a nice way to validate the raw database output.
-   - Good next step because it is simple to reason about and highly useful for real-world data exploration.
-
-3. TODO: first appearance vs peak year for a name
-   - Track when a name first appears in the data and when it reaches its highest count.
-   - This is the most interesting analytical query after search and ranking.
-   - Good next step because it builds on the existing year and count fields without requiring new assumptions.
-
-### Medium priority
-
-4. TODO: male/female name variants
+1. male/female name variants
    - Explore how to relate names across genders, such as "Alex" / "Alexa", "Jordan" / "Jordyn", or shared stems.
    - This is likely a more nuanced matching problem and may require a dedicated name-normalization step.
    - Worth addressing after the simpler queries are in place.
 
-5. TODO: name lifespan window analysis
+### Medium priority
+
+2. name lifespan window analysis
    - Estimate how many people with a given name were alive within a rolling 80-year window.
    - This is a rich historical question, but it requires careful assumptions about birth year, age, and how to model life spans.
    - Best tackled after the core database and query features are settled.
 
 ### Suggested order
 
-1. wildcard name searches
-2. top X names in a given year
-3. first appearance vs peak year for a name
-4. male/female variant analysis
-5. lifespan window analysis
+1. male/female variant analysis
+2. lifespan window analysis
 
 This sequence keeps the work grounded in the most useful and least ambiguous SQL features before moving on to more speculative historical analysis.
+
+## Wildcard search patterns
+
+Wildcard matching is supported directly in the name query helper and is intended as a first-class search pattern, not a future extension.
+
+Examples:
+
+- "A%" matches names starting with A.
+- "%a" matches names ending with a.
+- "%yn" matches names ending with yn.
+
+This is a natural extension of exact name lookups and works well with SQLite LIKE queries against the names table.
